@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agrim's Stopwatch</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(to right, #b2ffb2, #66ff66); /* Changed to light green gradient */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .stopwatch-container {
+            padding: 2rem;
+            max-width: 350px;
+            text-align: center;
+            border-radius: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .time-display {
+            font-size: 3rem;
+            color: #ffff00; /* Bright yellow */
+            margin: 1rem 0;
+        }
+
+        h1 {
+            color: #f8f8f8;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 0.5rem 1.5rem;
+            margin: 0.5rem;
+            border-radius: 10px;
+            border: none;
+            background-color: #0072ff;
+            color: white;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #005bb5;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stopwatch-container">
+        <h1>Agrim's Stopwatch</h1>
+        <p class="time-display">
+            <span id="minutes">00</span>:<span id="seconds">00</span>:<span id="tens">00</span>
+        </p>
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
+        <button id="reset">Reset</button>
+    </div>
+
+    <script>
+        window.onload = function () {
+            let minutes = 0;
+            let seconds = 0;
+            let tens = 0;
+            let interval;
+            const displayMinutes = document.getElementById('minutes');
+            const displaySeconds = document.getElementById('seconds');
+            const displayTens = document.getElementById('tens');
+            const startButton = document.getElementById('start');
+            const stopButton = document.getElementById('stop');
+            const resetButton = document.getElementById('reset');
+
+            const updateDisplay = () => {
+                displayTens.textContent = tens < 10 ? '0' + tens : tens;
+                displaySeconds.textContent = seconds < 10 ? '0' + seconds : seconds;
+                displayMinutes.textContent = minutes < 10 ? '0' + minutes : minutes;
+            };
+
+            const startTimer = () => {
+                tens++;
+                if (tens > 99) {
+                    seconds++;
+                    tens = 0;
+                }
+                if (seconds > 59) {
+                    minutes++;
+                    seconds = 0;
+                }
+                updateDisplay();
+            };
+
+            startButton.onclick = () => {
+                clearInterval(interval);
+                interval = setInterval(startTimer, 10);
+                startButton.disabled = true;
+            };
+
+            stopButton.onclick = () => {
+                clearInterval(interval);
+                startButton.disabled = false;
+            };
+
+            resetButton.onclick = () => {
+                clearInterval(interval);
+                tens = seconds = minutes = 0;
+                updateDisplay();
+                startButton.disabled = false;
+            };
+        };
+    </script>
+</body>
+
+</html>
